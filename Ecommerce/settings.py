@@ -110,9 +110,6 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'static','templates')
-            # os.path.join(BASE_DIR, 'customAdmin','templates'),
-            # os.path.join(BASE_DIR, 'customUser', 'templates'),
-            # os.path.join(BASE_DIR, 'Ecommerce', 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -210,20 +207,20 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 
 # django-paypal settings
-PAYPAL_RECEIVER_EMAIL = 'dusty.bun@gmail.com'
+PAYPAL_RECEIVER_EMAIL = config('PAYPAL_RECEIVER_EMAIL')
 PAYPAL_TEST = True
 
 # MAILCHIMP CREDENTIALS
-MAILCHIMP_API_KEY = "7a7ab8ee61d7e5384ebdd7d12461d1d0-us5"
-MAILCHIMP_DATA_CENTER = "us5"
-MAILCHIMP_EMAIL_LIST_ID = "fc18f6006b"
+MAILCHIMP_API_KEY = config('MAILCHIMP_API_KEY')
+MAILCHIMP_DATA_CENTER = config('MAILCHIMP_DATA_CENTER')
+MAILCHIMP_EMAIL_LIST_ID = config('MAILCHIMP_EMAIL_LIST_ID')
 
 
-SOCIAL_AUTH_FACEBOOK_KEY = '290746595987865'       # App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = '98699872ed75413dc332d7f3d7b35557'  # App Secret
+SOCIAL_AUTH_FACEBOOK_KEY = config('SOCIAL_AUTH_FACEBOOK_KEY')       # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = config('SOCIAL_AUTH_FACEBOOK_SECRET')  # App Secret
 
-SOCIAL_AUTH_GITHUB_KEY = 'fe01de7f4d0850361eb5'
-SOCIAL_AUTH_GITHUB_SECRET = '5fc6db3b1fcba1d8a3d27cfbc2fc2178100bb3ad'
+SOCIAL_AUTH_GITHUB_KEY = config('SOCIAL_AUTH_GITHUB_KEY')
+SOCIAL_AUTH_GITHUB_SECRET = config('SOCIAL_AUTH_GITHUB_SECRET')
 
 # SESSION_COOKIE_SECURE=False
 

@@ -7,7 +7,7 @@ from customAdmin.models import Banners, Category, Images, Product
 
 
 class HomeView(TemplateView):
-    template_name = 'home.html'
+    template_name = 'customUser/home.html'
 
     def get_context_data(self, **kwargs):
         products = []
