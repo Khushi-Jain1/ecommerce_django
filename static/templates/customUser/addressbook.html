@@ -1,0 +1,54 @@
+{% extends 'customUser/baseUser.html' %} {% block content %}
+
+<div class="container">
+  <div class="row equal">
+    <div
+      class="col-sm-3 address-block "
+      onclick="location.href='/address/add-address/'"
+    >
+      <div class="card">
+        <div class="card-body card h-100 add-address" >
+          <center>
+            <i class="fa fa-plus fa-5x"></i><br /><span>Add Adddress</span>
+          </center>
+        </div>
+      </div>
+    </div>
+    {% for address in addresses %}
+    <div class="col-sm-3 address-block">
+      <!--     <div class="card">
+                <div class="card-body">
+                    {{address.address}}<br />
+                    {{address.pincode}}<br />
+                    {{address.name}}<br />
+                    {{address.mobile_number}}<br />
+                    <a href="{% url 'user:edit-address' pk=address.pk %}" >Edit</a> | 
+                    <a href="{% url 'user:edit-address' pk=address.pk %}" >Delete</a>
+                </div>
+            </div>
+        </div> -->
+      <div class="card">
+        <div class="card h-100 card-body">
+          <h5 class="card-title">{{address.name}}</h5>
+          <span class="card-text">{{address.address_line1}},</span><br/>
+          <span class="card-text">{{address.address_line2}},</span><br/>
+          <span class="card-text">{{address.city}},</span>
+          <span class="card-text">{{address.state}},</span>
+          <span> {{address.pincode}}</span><br />
+          <span class="card-text">{{address.country}}</span>
+          <h6 class="card-subtitle mb-2 text-muted">Phone Number : {{address.mobile_number}}</h6>
+          <a
+            href="{% url 'user:edit-address' pk=address.pk %}"
+            class="card-link"
+            >Edit</a>
+          |
+          <a href="{% url 'user:delete-address' id=address.id %}" class="card-link">Delete</a>
+        </div>
+      </div>
+    </div>
+
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

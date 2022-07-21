@@ -1,0 +1,188 @@
+{% extends 'customUser/baseUser.html' %} {% block content %}
+<section id="cart_items">
+  <div class="container">
+    <div class="breadcrumbs">
+      <ol class="breadcrumb">
+        <li><a href="#">Home</a></li>
+        <li class="active">Shopping Cart</li>
+      </ol>
+    </div>
+    <div class="table-responsive cart_info">
+      <table class="table table-condensed">
+        <thead>
+          <tr class="cart_menu">
+            <td class="image">Item</td>
+            <td class="description"></td>
+            <td class="price">Price</td>
+            <td class="quantity">Quantity</td>
+            <td class="total">Total</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in products %}
+          <tr>
+            <td class="cart_product">
+              <a href=""
+                ><img height="150px" src="{{product.media}}{{product.image}}" alt=""
+              /></a>
+            </td>
+            <td class="cart_description">
+              <h4><a href="">{{product.name}}</a></h4>
+              <p>Web ID: {{product.product_id}}</p>
+            </td>
+            <td class="cart_price">
+              <p>$ {{product.price}}</p>
+            </td>
+            <td class="cart_quantity">
+              <div class="number-input">
+                <button onclick="decrement('{{product.product_id}}')" ></button>
+                <input
+                disabled
+                  class="quantity"
+                  min="1"
+                  name="quantity"
+                  value="{{product.quantity}}"
+                  type="number"
+                />
+                <button
+                  onclick="increment('{{product.product_id}}')"
+                  class="plus"
+                ></button>
+              </div>
+              <!-- <div class="cart_quantity_button">
+                <a class="cart_quantity_up" href=""> + </a>
+                <input
+                  class="cart_quantity_input"
+                  type="text"
+                  name="quantity"
+                  value="{{product.quantity}}"
+                  autocomplete="off"
+                  size="2"
+                  min="1"
+                />
+                <a class="cart_quantity_down" href=""> - </a>
+              </div> -->
+            </td>
+            <td class="cart_total">
+              <p class="cart_total_price">$ {{product.total}}</p>
+            </td>
+            <td class="cart_delete">
+              <form
+                method="POST"
+                action="{% url 'user:delete_cartProduct' pk=product.cart_id %}"
+              >
+                {% csrf_token %}<button
+                  type="submit"
+                  class="btn d-contents"
+                  value="DELETE"
+                >
+                  <a class="cart_quantity_delete"
+                    ><i class="fa fa-times"></i
+                  ></a>
+                </button>
+              </form>
+              <!-- <a
+                class="cart_quantity_delete"
+                href="{% url 'user:delete_cartProduct' pk=product.cart_id %}"
+                ><i class="fa fa-times"></i
+              ></a> -->
+            </td>
+          </tr>
+          {% endfor %}
+          {% if products %}
+          <tr>
+            <td colspan="4">&nbsp;</td>
+            <td colspan="2">
+                <table class="table table-condensed total-result">
+                    <tr>
+                        <td>Cart Sub Total</td>
+                        <td>$ {{subtotal.cart_total}}</td>
+                    </tr>
+                    <!-- <tr>
+                        <td>Exo Tax</td>
+                        <td>$2</td>
+                    </tr> -->
+                    <tr class="shipping-cost">
+                        <td>Shipping Cost</td>
+                        <td> $ {{subtotal.shipping}} </td>										
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td><span> $ {{subtotal.total}} </span></td>
+                    </tr>
+                  </table>
+                  <button type="button" onclick="location.href='/checkout/'" class="btn btn-primary">Checkout</button>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td></td>
+          <td></td>
+          <td><h2>Nothing in cart</h2></td>
+        </tr>
+        {% endif %}
+        </tbody>
+      </table>
+    </div>
+    
+  </div>
+</section>
+<!--/#cart_items-->
+
+<!-- <section id="do_action">
+  <div class="container">
+    <div class="heading">
+    </div>
+    <div class="row">
+      <div class="col-sm-6"></div>
+      <div class="col-sm-6">
+        <div class="total_area">
+          <ul>
+            <li>Cart Sub Total <span>$59</span></li>
+            <li>Eco Tax <span>$2</span></li>
+            <li>Shipping Cost <span>Free</span></li>
+            <li>Total <span>$61</span></li>
+          </ul>
+          <a class="btn btn-default update" href="">Update</a> 
+          <a class="btn btn-default check_out" href="">Check Out</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+<!--/#do_action-->
+{% endblock %} 
+{% block script %}
+<script>
+
+  function decrement(id) {
+    var value = $(this).siblings('input').val();
+    $.ajax({
+      type: "GET",
+      url: "product_quantity/",
+      data: {
+        product_id: id,
+        task: 'decrement'
+      },
+      success: function (data) {
+        location.reload()
+      },
+    });
+  }
+
+  function increment(id) {
+    $.ajax({
+      type: "GET",
+      url: "product_quantity/",
+      data: {
+        product_id: id,
+        task: 'increment'
+      },
+      success: function (data) {
+          location.reload()
+      },
+    });
+  }
+</script>
+{% endblock %}

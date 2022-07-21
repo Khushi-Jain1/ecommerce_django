@@ -1,0 +1,33 @@
+{% extends 'customUser/baseUser.html' %} {% block content %}
+<section id="profile-form">
+  <!--form-->
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="login-form">
+          <!--login form-->
+          <h2>Profile</h2>
+          <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form}}
+            {% for error in invalid_pass %}
+            <div class="error-message">*{{ invalid_pass.msg }}</div>
+            {% endfor %} 
+            <img src="{{image.media}}{{image.image}} " height="200vh" />
+           <div class="row">
+              <button onclick="location.href='/change-password/'" type="button" style="float: right;" class="btn btn-default">
+              Change Password
+            </button>
+            <button type="submit" class="btn btn-default">
+              Update
+            </button>
+           </div>
+          </form>
+        </div>
+        <!--/login form-->
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

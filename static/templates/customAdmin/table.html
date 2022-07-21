@@ -1,0 +1,184 @@
+{% extends 'customAdmin/base_dashboard.html' %} {% load static %} {% block link %}
+<link
+  rel="stylesheet"
+  href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}"
+/>
+<link
+  rel="stylesheet"
+  href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}"
+/>
+<link
+  rel="stylesheet"
+  href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}"
+/>
+{% endblock %} {% block title %} {{tab.title}} {% endblock %} {% block breadcrumb %}
+<ol class="breadcrumb float-sm-right">
+  <li class="breadcrumb-item">
+    <a href="{% url 'admin:dashboard' %}">Home</a>
+  </li>
+  <li class="breadcrumb-item active">{{tab.title}}</li>
+</ol>
+{% endblock %} {% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <form action="" method="POST">
+          {% csrf_token %} {% if tab.title != 'Customers' %}
+          <div class="card-header">
+            <div class="float-left">
+              <center>{{form.as_p}}
+                {% if messages %}
+                  <div class="messages">
+                    {% for message in messages %}
+                    <p{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</p>
+                      {% endfor %}
+                  </div>
+                      {% endif %}
+              </center>
+            </div>
+            <div class="float-right">
+              {% if tab.title != 'Mails' %}
+              <button
+                type="button"
+                onclick="location.href='./add/'"
+                class="btn btn-primary"
+              >
+                <i class="fas fa-plus"></i>
+              </button>
+              {% endif %}
+              <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          {% endif %}
+          <!-- /.card-header -->
+          <div class="card-body">
+            <table id="example2" class="table table-bordered table-hover w-100">
+              <thead>
+                <tr>
+                  <th></th>
+                  {% for column in table.columns %}
+                  <th>{{column}}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% csrf_token %} {% block table %} 
+                {% for column in object_list %} 
+                <tr>
+                  <td>
+                    <input
+                      type="checkbox"
+                      id="checkboxPrimary3"
+                      name="checks[]"
+                      value="{{column.id}}"
+                    />
+                  </td>
+                  {% if tab.title == 'Orders' %}
+                  <td>{{ column.id }}</td>
+                  <td>
+                    {{ column.customer.username }}
+                    <!-- {{column.customer.last_name}} -->
+                  </td>
+                  <td>{{column.status}}</td>
+                  <td>{{column.total}}</td>
+                  {% elif tab.title != 'CMS' and tab.title != 'Customers' and tab.title != 'Banners' %}
+                  <td>{{ column.name }}</td>
+                  {% endif %} {% if tab.title == 'Attribute' %}
+                  <td>{{column.attribute}}</td>
+                  {% elif tab.title == 'Coupons' %}
+                  <td>{{column.code}}</td>
+                  <td>{{column.discount}}</td>
+                  <td>{{column.start_date}}</td>
+                  <td>{{column.end_date}}</td>
+                  <td>{{column.active}}</td>
+                  {% elif tab.title == 'Mails' %}
+                  <td>{{column.subject}}</td>
+                  <td>{{column.mailed_on}}</td>
+                  {% elif tab.title == 'Templates' %}
+                  <td>{{column.code}}</td>
+                  {% elif tab.title == 'CMS' %}
+                  <td>{{column.url}}</td>
+                  <td>{{column.title}}</td>
+                  {% elif tab.title == 'Customers' %}
+                  <td>{{column.username}}</td>
+                  <td>{{column.email}}</td>
+                  <td>{{column.is_active}}</td>
+                  <td>{{column.date_joined}}</td>
+                  {% elif tab.title == 'Banners' %}
+                  <td>{{ column.title }}</td>
+                  <td>{{column.link}} </td>
+                  {% endif %}
+                  <td>
+                    {% if tab.title == 'Mails' or tab.title == 'Orders' or tab.title == 'Customers' %}
+                    <button
+                      onclick="location.href='view/{{column.id}}'"
+                      type="button"
+                      class="btn"
+                    >
+                      <i class="far fa-eye"></i>
+                    </button>
+                    {% else %}
+                    <button
+                      onclick="location.href='{{column.id}}/update'"
+                      type="button"
+                      class="btn"
+                    >
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    {% endif %}
+                    <!-- <button
+                      onclick="location.href='{{column.id}}/update'"
+                      type="button"
+                      class="btn"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button> -->
+                  </td>
+                </tr>
+                {% endfor %} {% endblock %}
+              </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </form>
+      </div>
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+</div>
+
+{% endblock %} {% block script %}
+<!-- Page specific script -->
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'dist/js/demo.js' %}"></script>
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+<script src="{% static 'plugins/jszip/jszip.min.js' %}"></script>
+<script src="{% static 'plugins/pdfmake/pdfmake.min.js' %}"></script>
+<script src="{% static 'plugins/pdfmake/vfs_fonts.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+<script>
+  $(function () {
+    $("#example2").DataTable({
+      paging: true,
+      lengthChange: true,
+      searching: true,
+      ordering: true,
+      info: true,
+      autoWidth: true,
+      responsive: true,
+    });
+  });
+</script>
+{% endblock %}

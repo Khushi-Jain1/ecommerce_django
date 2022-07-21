@@ -1,0 +1,24 @@
+{% extends 'customAdmin/form.html' %} {% block form %}
+<!-- {{form.as_p}} -->
+<div class="row">
+  <div class="col-4">
+    <label>Name: </label>
+    {{form.name}}
+  </div>
+  <div class="col-5">
+    <label>Mail Id: </label>
+    {{form.mail}}
+  </div>
+  <div class="col-3">
+    <label>Date: </label>
+    {{form.mailed_on}}
+  </div>
+</div>
+<label>Subject: </label>
+{{form.subject}}
+<label>Message: </label>
+{{form.message}}
+<label>User Logged In: </label>
+{{form.user_logged_in}}
+<label>Reply: </label>
+{{form.reply}} {% endblock %}

@@ -1,0 +1,227 @@
+{% extends 'customUser/baseUser.html' %} {% block content %}
+<section id="cart_items">
+  <div class="container">
+    <div class="breadcrumbs">
+      <ol class="breadcrumb">
+        <li><a href="#">Home</a></li>
+        <li class="active">Check out</li>
+      </ol>
+    </div>
+    <!--/breadcrums-->
+    <!--/register-req-->
+
+    <div class="shopper-informations">
+      <div class="row">
+        {% for error in checkout_form.non_field_errors %}
+        <div class="error-message"><h3>{{ error }}</h3></div>
+        {% endfor %}
+        <div class="review-payment">
+          <h2>Review & Payment</h2>
+        </div>
+
+        <div class="table-responsive cart_info">
+          <table class="table table-condensed">
+            <thead>
+              <tr class="cart_menu">
+                <td class="image">Item</td>
+                <td class="description"></td>
+                <td class="price">Price</td>
+                <td class="quantity">Quantity</td>
+                <td class="total">Total</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+              {% for product in products %}
+              <tr>
+                <td class="cart_product">
+                  <a href=""
+                    ><img height="150px" src="{{product.media}}{{product.image}}" alt=""
+                  /></a>
+                </td>
+                <td class="cart_description">
+                  <h4><a href="">{{product.name}}</a></h4>
+                  <p>Web ID: {{product.product_id}}</p>
+                </td>
+                <td class="cart_price">
+                  <p>$ {{product.price}}</p>
+                </td>
+                <td class="cart_quantity">
+                  <div class="number-input">
+                    <button
+                      onclick="decrement('{{product.product_id}}')"
+                    ></button>
+                    <input
+                      disabled
+                      class="quantity"
+                      min="1"
+                      name="quantity"
+                      value="{{product.quantity}}"
+                      type="number"
+                    />
+                    <button
+                      onclick="increment('{{product.product_id}}')"
+                      class="plus"
+                    ></button>
+                  </div><br>
+                  {% if product.error != None %}
+                  <div class="error">{{product.error}}</div>
+                  {% endif %}
+                </td>
+                <td class="cart_total">
+                  <p class="cart_total_price">$ {{product.total}}</p>
+                </td>
+                <td class="cart_delete">
+                  <form
+                    method="POST"
+                    action="{% url 'user:delete_cartProduct' pk=product.cart_id %}"
+                  >
+                    {% csrf_token %}<button
+                      type="submit"
+                      class="btn d-contents"
+                      value="DELETE"
+                    >
+                      <a class="cart_quantity_delete"
+                        ><i class="fa fa-times"></i
+                      ></a>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+    </div>
+  </div>
+</section>
+<!--/#cart_items-->
+
+<section id="do_action">
+  <div class="container">
+    <div class="heading">
+      <h3>What would you like to do next?</h3>
+      <!-- <p>
+        Choose if you have a discount code or reward points you want to use or
+        would like to estimate your delivery cost.
+      </p> -->
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="chose_area">
+          <ul class="user_info">
+            <p><b>Redeem Coupon</b></p>
+            <form method="POST" action="">
+                {% csrf_token %}
+                <li class="single_field" style="float: left;" >
+                  {% if coupon.coupon_name %}
+                  <label>Coupon Name:</label>
+                 <input type="text" value="{{coupon.coupon_name}}" disabled >
+                  {% else %}
+                  <label>Coupon Code:</label>
+                  {{coupon_form.coupon}}
+                  {% endif %}
+                   {% if messages %}
+                   <div class="messages">
+                       {% for message in messages %}
+                       <p{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</p>
+                           {% endfor %}
+                   </div>
+                   {% endif %}
+                   <input type="hidden" name="form_type" value="coupon" />
+                  </li>
+                  {% if coupon.coupon_name %}
+                  <button type="button" style="float: left; margin-top: 25px;" onclick="location.href='/checkout/remove-coupon/'" class="btn btn-default check_out" href="">Cancel Coupon</button>
+                  {% else %}
+                  <button type="submit" style="float: left;" class="btn btn-default check_out" href="">Apply</button>
+                  {% endif %}
+            </form>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div class="total_area">
+          <ul>
+            <li>Cart Sub Total <span>$ {{subtotal.cart_total}}</span></li>
+            {% if subtotal.discount > 0 %}
+            <li>Discount <span> - $ {{subtotal.discount}} </span></li>
+            {% endif %}
+            <li>Shipping Cost <span>+ $ {{subtotal.shipping}}</span></li>
+            <li>Total <span>$ {{subtotal.total}}</span></li>
+          </ul>
+          <!-- <a class="btn btn-default update" href="">Update</a> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="payment" >
+  <div class="container">
+    <div class="row checkout">
+      <div class="shopper-info chose_area " >
+        <form method="POST" action="">
+          {% csrf_token %}
+          <div class="col-sm-6">
+            <p>Shipping Address</p>
+            {{checkout_form.shipping_address}}
+            <a href="{% url 'user:address' %}">Add Address</a>
+          </div>
+          <div class="col-sm-6">
+            <p>Billing Address</p>
+            {{checkout_form.billing_address}}
+            <a href="{% url 'user:address' %}">Add Address</a>
+          </div>
+          <!-- <div class="col-sm-4">
+            <p>Payment Method</p>
+            {{checkout_form.payment_method}}
+            <div id="paypal-button-container"></div>
+          </div> -->
+          <input type="hidden" name="cart_total" value="{{subtotal.cart_total}}" />
+          <input type="hidden" name="discount" value="{{subtotal.discount}}" />
+          <input type="hidden" name="total" value="{{subtotal.total}}" />
+          <input type="hidden" name="shipping" value="{{subtotal.shipping}}" />
+          <input type="hidden" name="form_type" value="payment" />
+          <button type="submit" style="float: right;"  class="btn btn-default check_out">Place Order</button>
+        </form>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<!--/#do_action-->
+
+{% endblock %} {% block script %}
+
+<script>
+  function decrement(id) {
+    var value = $(this).siblings("input").val();
+    $.ajax({
+      type: "GET",
+      url: "product_quantity/",
+      data: {
+        product_id: id,
+        task: "decrement",
+      },
+      success: function (data) {
+        location.reload();
+      },
+    });
+  }
+
+  function increment(id) {
+    $.ajax({
+      type: "GET",
+      url: "product_quantity/",
+      data: {
+        product_id: id,
+        task: "increment",
+      },
+      success: function (data) {
+        location.reload();
+      },
+    });
+  }
+</script>
+{% endblock %}

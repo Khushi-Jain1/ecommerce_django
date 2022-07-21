@@ -1,0 +1,17 @@
+{{attribute_form.management_form}} {% for form in attribute_form %}
+  <div class="row attribute-form">
+    {{form}}
+    <button
+      onclick="handleClick('{{form.instance}}')"
+      type="button"
+      class="btn btn-primary"
+      style="margin-top: 0px; margin-bottom: 20px;"
+    >
+      <i class="fas fa-trash"></i>
+    </button>
+  </div>
+  {% endfor %}
+
+  <button id="add-form" class="btn btn-primary" type="button">
+    Add Attribute
+  </button>

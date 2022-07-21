@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+{% load static %}
+{% load socialaccount %}
+{% load flatpages %}
+{% get_flatpages as flatpages %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>E-Shopper</title>
+    <link
+      href="{% static 'customUser/css/bootstrap.min.css' %}"
+      rel="stylesheet"
+    />
+    <link
+      href="{% static 'customUser/css/font-awesome.min.css' %}"
+      rel="stylesheet"
+    />
+    <link
+      href="{% static 'customUser/css/prettyPhoto.css' %}"
+      rel="stylesheet"
+    />
+    <link
+      href="{% static 'customUser/css/price-range.css' %}"
+      rel="stylesheet"
+    />
+    <link href="{% static 'customUser/css/animate.css' %}" rel="stylesheet" />
+    <link href="{% static 'customUser/css/main.css' %}" rel="stylesheet" />
+    <link
+      href="{% static 'customUser/css/responsive.css' %}"
+      rel="stylesheet"
+    />
+    <link
+      rel="shortcut icon"
+      href="{% static 'customUser/images/ico/favicon.ico' %}"
+    />
+    <link
+      rel="apple-touch-icon-precomposed"
+      sizes="144x144"
+      href="{% static 'customUser/images/ico/apple-touch-icon-144-precomposed.png' %}"
+    />
+    <link
+      rel="apple-touch-icon-precomposed"
+      sizes="114x114"
+      href="{% static 'customUser/images/ico/apple-touch-icon-114-precomposed.png' %}"
+    />
+    <link
+      rel="apple-touch-icon-precomposed"
+      sizes="72x72"
+      href="{% static 'customUser/images/ico/apple-touch-icon-72-precomposed.png' %}"
+    />
+    <link
+      rel="apple-touch-icon-precomposed"
+      href="{% static 'customUser/images/ico/apple-touch-icon-57-precomposed.png' %}"
+    />
+    <script type="text/javascript" async=1>
+      ;(function(p,l,o,w,i,n,g){if(!p[i]){p.GlobalSnowplowNamespace=p.GlobalSnowplowNamespace||[];
+      p.GlobalSnowplowNamespace.push(i);p[i]=function(){(p[i].q=p[i].q||[]).push(arguments)
+      };p[i].q=p[i].q||[];n=l.createElement(o);g=l.getElementsByTagName(	o)[0];n.async=1;
+      n.src=w;g.parentNode.insertBefore(n,g)}}
+      (window,document,"script","http://cdn.jsdelivr.net/gh/snowplow/sp-js-assets@2.15.0/sp.js","snowplow"));
+  
+      snowplow('newTracker', 'sp', '180.149.247.60:5000', {
+      appId: 'e-shopper_khushi', // Enter Your app name and Your name here
+      platform: "web",
+      eventMethod: 'post',
+      cookieDomain: null,
+      discoverRootDomain: true,
+      cookieName: '_sp_',
+      cookieSameSite: 'Lax',
+      cookieSecure: true,
+      encodeBase64: true,
+      respectDoNotTrack: false,
+      bufferSize: 1,
+      maxPostBytes: 40000,
+        cookieLifetime: 63072000,
+      stateStorageStrategy: 'cookieAndLocalStorage',
+      maxLocalStorageQueueSize: 1000,
+      resetActivityTrackingOnPageView: true,
+      connectionTimeout: 5000,
+      anonymousTracking: false,
+      contexts: {
+        webPage: true,
+        performanceTiming: true,
+        gaCookies: true,
+        geolocation: true,
+        clientHints: true,
+      }
+      });
+  
+    snowplow("trackPageView");
+  </script>
+  </head
+  ><!--/head-->
+
+  <body>
+    <header id="header">
+
+      <div class="header-middle">
+        <!--header-middle-->
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="logo pull-left">
+                <a href="{% url 'user:home' %}"
+                  ><img
+                    src="{% static 'customUser/images/home/logo.png' %}"
+                    alt=""
+                /></a>
+              </div>
+              <!-- <div class="btn-group pull-right">
+                <div class="btn-group">
+                  <button
+                    type="button"
+                    class="btn btn-default dropdown-toggle usa"
+                    data-toggle="dropdown"
+                  >
+                    USA
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a href="">Canada</a></li>
+                    <li><a href="">UK</a></li>
+                  </ul>
+                </div>
+
+                <div class="btn-group">
+                  <button
+                    type="button"
+                    class="btn btn-default dropdown-toggle usa"
+                    data-toggle="dropdown"
+                  >
+                    DOLLAR
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a href="">Canadian Dollar</a></li>
+                    <li><a href="">Pound</a></li>
+                  </ul>
+                </div>
+              </div> -->
+            </div>
+            <div class="col-sm-8">
+              <div class="shop-menu pull-right">
+                <ul class="nav navbar-nav">
+                  <li>
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'user:profile' pk=request.user.id %}"
+                      ><i class="fa fa-user"></i> {{request.user.username}}
+					  {% endif %}
+					</a>
+                  </li>
+                  <li>
+                    <a href="{% url 'user:wishlist' %}"><i class="fa fa-star"></i> Wishlist</a>
+                  </li>
+                  <!-- <li>
+                    <a href="{% url 'user:checkout' %}"><i class="fa fa-crosshairs"></i> Checkout</a>
+                  </li> -->
+                  <li>
+                    <a href="{% url 'user:cart' %}"
+                      ><i class="fa fa-shopping-cart"></i> Cart</a
+                    >
+                  </li>
+                  <li>
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'user:logout' %}" class="active"
+                      ><i class="fa fa-lock"></i> Logout</a
+                    >
+                    {% else %}
+                    <a href="{% url 'user:login' %}" class="active"
+                      ><i class="fa fa-lock"></i> Login</a
+                    >
+                    {% endif %}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--/header-middle-->
+
+      <div class="header-bottom">
+        <!--header-bottom-->
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8">
+              <div class="navbar-header">
+                <button
+                  type="button"
+                  class="navbar-toggle"
+                  data-toggle="collapse"
+                  data-target=".navbar-collapse"
+                >
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+              </div>
+              <div class="mainmenu pull-left">
+                <ul class="nav navbar-nav collapse navbar-collapse">
+                  <!-- <li><a href="/">Home</a></li> -->
+                  <li><a href="{% url 'user:home' %}">Home</a></li>
+                  <li><a href="{% url 'user:products' %}">Shop</a></li>
+                  {% if request.user.is_authenticated %}
+                  <li class="dropdown">
+                    <a href="#">Account<i class="fa fa-angle-down"></i></a>
+                    <ul role="menu" class="sub-menu">
+                      <!-- <li><a href=""></a>Products</a></li> -->
+                      <li><a href="{% url 'user:address' %}">Address Book</a></li> 
+                      <!-- <li><a href="{% url 'user:checkout' %}">Checkout</a></li> -->
+                      <li><a href="{% url 'user:cart' %}">Cart</a></li>
+                      <li><a href="{% url 'user:wishlist' %}">Wishlist</a></li>
+                      <li><a href="{% url 'user:my_orders' %}">My Orders</a></li>
+                      <li><a href="{% url 'user:track-order' %}">Track Order</a></li>
+                      <!-- <li>
+                        {% if request.user.is_authenticated %}
+                        <a href="{% url 'user:logout' %}">Logout</a>
+                        {% else %}
+                        <a href="{% url 'user:login' %}" class="active"
+                          >Login</a
+                        >
+                        {% endif %}
+                      </li> -->
+                    </ul>
+                  </li>
+                  {% endif %}
+                  <!-- <li><a href="404.html">404</a></li> -->
+                  <li><a href="{% url 'user:contact_us' %}">Contact</a></li>
+                  <li class="dropdown">
+                    <a href="#">Extra<i class="fa fa-angle-down"></i></a>
+                    <ul role="menu" class="sub-menu">
+                      {% for page in flatpages %}
+                      <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+                    {% endfor %}
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-sm-4">
+            <form action="/search/" method="GET">
+              <div class="search_box pull-right">
+                <input type="text" name="query" placeholder="Search"   />
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--/header-bottom-->
+    </header>
+    <!--/header-->
+
+    {% block content %} {% endblock %}
+
+    <footer id="footer">
+      <!--Footer-->
+      <div class="footer-top">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-2">
+              <div class="companyinfo">
+                <h2><span>e</span>-shopper</h2>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit,sed
+                  do eiusmod tempor
+                </p>
+              </div>
+            </div>
+            <div class="col-sm-7">
+              <div class="col-sm-3">
+                <div class="video-gallery text-center">
+                  <a href="#">
+                    <div class="iframe-img">
+                      <img
+                        src="{% static 'customUser/images/home/iframe1.png' %}"
+                        alt=""
+                      />
+                    </div>
+                    <div class="overlay-icon">
+                      <i class="fa fa-play-circle-o"></i>
+                    </div>
+                  </a>
+                  <p>Circle of Hands</p>
+                  <h2>24 DEC 2014</h2>
+                </div>
+              </div>
+
+              <div class="col-sm-3">
+                <div class="video-gallery text-center">
+                  <a href="#">
+                    <div class="iframe-img">
+                      <img
+                        src="{% static 'customUser/images/home/iframe2.png' %}"
+                        alt=""
+                      />
+                    </div>
+                    <div class="overlay-icon">
+                      <i class="fa fa-play-circle-o"></i>
+                    </div>
+                  </a>
+                  <p>Circle of Hands</p>
+                  <h2>24 DEC 2014</h2>
+                </div>
+              </div>
+
+              <div class="col-sm-3">
+                <div class="video-gallery text-center">
+                  <a href="#">
+                    <div class="iframe-img">
+                      <img
+                        src="{% static 'customUser/images/home/iframe3.png' %}"
+                        alt=""
+                      />
+                    </div>
+                    <div class="overlay-icon">
+                      <i class="fa fa-play-circle-o"></i>
+                    </div>
+                  </a>
+                  <p>Circle of Hands</p>
+                  <h2>24 DEC 2014</h2>
+                </div>
+              </div>
+
+              <div class="col-sm-3">
+                <div class="video-gallery text-center">
+                  <a href="#">
+                    <div class="iframe-img">
+                      <img
+                        src="{% static 'customUser/images/home/iframe4.png' %}"
+                        alt=""
+                      />
+                    </div>
+                    <div class="overlay-icon">
+                      <i class="fa fa-play-circle-o"></i>
+                    </div>
+                  </a>
+                  <p>Circle of Hands</p>
+                  <h2>24 DEC 2014</h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="address">
+                <img
+                  src="{% static 'customUser/images/home/map.png' %}"
+                  alt=""
+                />
+                <p>505 S Atlantic Ave Virginia Beach, VA(Virginia)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-widget">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-2">
+              <div class="single-widget">
+                <h2>Service</h2>
+                <ul class="nav nav-pills nav-stacked">
+                  <li><a href="">Online Help</a></li>
+                  <li><a href="{% url 'user:contact_us' %}">Contact Us</a></li>
+                  <li><a href="">Order Status</a></li>
+                  <li><a href="">Change Location</a></li>
+                  <li><a href="">FAQ’s</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="single-widget">
+                <h2>Quock Shop</h2>
+                <ul class="nav nav-pills nav-stacked">
+                  <li><a href="">T-Shirt</a></li>
+                  <li><a href="">Mens</a></li>
+                  <li><a href="">Womens</a></li>
+                  <li><a href="">Gift Cards</a></li>
+                  <li><a href="">Shoes</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="single-widget">
+                <h2>Policies</h2>
+                <ul class="nav nav-pills nav-stacked">
+                  <li><a href="">Terms of Use</a></li>
+                  <li><a href="">Privecy Policy</a></li>
+                  <li><a href="">Refund Policy</a></li>
+                  <li><a href="">Billing System</a></li>
+                  <li><a href="">Ticket System</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="single-widget">
+                <h2>About Shopper</h2>
+                <ul class="nav nav-pills nav-stacked">
+                  <li><a href="">Company Information</a></li>
+                  <li><a href="">Careers</a></li>
+                  <li><a href="">Store Location</a></li>
+                  <li><a href="">Affillate Program</a></li>
+                  <li><a href="">Copyright</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-sm-3 col-sm-offset-1">
+              <div class="single-widget">
+                <h2>About Shopper</h2>
+                <form action="#" class="searchform">
+                  <input type="text" placeholder="Your email address" />
+                  <button type="submit" class="btn btn-default">
+                    <i class="fa fa-arrow-circle-o-right"></i>
+                  </button>
+                  <p>
+                    Get the most recent updates from <br />our site and be
+                    updated your self...
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="container">
+          <div class="row">
+            <p class="pull-left">
+              Copyright © 2021 NeoSoft Technologies. All rights reserved.
+            </p>
+            <!-- <p class="pull-right">Designed by <span><a target="_blank" href="http://www.themeum.com">Khushi Jain</a></span></p> -->
+            <p class="pull-right">
+              Designed by <span><a href="#">Khushi Jain</a></span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!--/Footer-->
+
+    <script src="{% static 'customUser/js/jquery.js' %}"></script>
+    <!-- <script src="{% static 'customUser/js/price-range.js' %}"></script> -->
+    <script src="{% static 'customUser/js/jquery.scrollUp.min.js' %}"></script>
+    <script src="{% static 'customUser/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'customUser/js/jquery.prettyPhoto.js' %}"></script>
+    <script src="{% static 'customUser/js/main.js' %}"></script>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v12.0&appId=290746595987865&autoLogAppEvents=1" nonce="teeVSW22"></script>
+    {% block script %}
+    {% endblock %}
+  </body>
+</html>

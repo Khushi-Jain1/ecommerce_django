@@ -1,0 +1,17 @@
+{% extends 'customUser/baseUser.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="payment-success col-sm-6 col-sm-offset-3">
+            <center>
+                <h2>Order placed</h2>
+
+                <p>
+                    <a href="{% url 'user:products' %}" >shop more >></a>
+                </p>
+            </center>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,186 @@
+{% extends 'customAdmin/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}
+{{tab.parent_title}}
+{% endblock %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="{% url 'admin:dashboard' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'admin:orders' %}">{{tab.parent_title}}</a></li>
+    <li class="breadcrumb-item active"> {{tab.title}} </li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">{{tab.title}}
+                    </h3>
+                </div>
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-5 orderDetails">
+                                    <p> <b>ORDER DETAILS</b> </p>
+                                    <b>Order Id: </b> {{orderDetails.order_id}}<br>
+                                    <b>Order Status: </b> {{orderDetails.status}}<br>
+                                    <b>Ordered by: </b> {{orderDetails.user.first_name}} {{orderDetails.user.last_name}}<br>
+                                    <b>Contact Number: </b> {{orderDetails.user.mobile_number}}<br>
+                                    <b>Email Id: </b> {{orderDetails.user.email}}<br>
+                                    <b>Admin: </b> {{orderDetails.user.is_superuser}}<br>
+                                </div>
+                                <div class="col-sm-1"></div>
+                                <div class="col-sm-5 orderDetails">
+                                    <p> <b>PAYMENT DETAILS</b> </p>
+                                    {% if orderDetails.paymentDetails.payment_mode == 'cod' %}
+                                    <b>Payment Mode: </b> Cash on Delivery<br>
+                                    {% else %}
+                                    <b>Payment Mode: </b> Netbanking<br>
+                                    <b>Payment by: </b> {{orderDetails.paymentDetails.name}}<br>
+                                    <b>Email Id: </b> {{orderDetails.paymentDetails.email}}<br>
+                                    <b>Transaction Id: </b> {{orderDetails.paymentDetails.transaction_id}}<br>
+                                    {% endif %}
+                                    <b>Payment Status: </b> {{orderDetails.paymentDetails.payment_status}}<br>
+                                    {% if orderDetails.coupon %}
+                                    <b> Coupon Used: </b> {{orderDetails.coupon}} ( code: {{orderDetails.coupon.code}} )
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <table id="example2" class="table table-bordered table-hover w-100">
+                                <thead>
+                                  <tr>
+                                    <th>Shipping Address</th>
+                                    <th>Billing Address</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                 <tr>
+                                     <td>
+                                        <b>{{orderDetails.shipping_address.name}}</b>
+                                        <address>
+                                            {{orderDetails.shipping_address.address_line1}},<br>
+                                            {{orderDetails.shipping_address.address_line2}},<br>      
+                                            {{orderDetails.shipping_address.city}},{{orderDetails.shipping_address.state}},{{orderDetails.shipping_address.pincode}},<br>
+                                            {{orderDetails.shipping_address.country}}                  
+                                        </address>
+                                    </td>
+                                     <td><b>{{orderDetails.billing_address.name}}</b>
+                                        <address>
+                                            {{orderDetails.billing_address.address_line1}},<br>
+                                            {{orderDetails.billing_address.address_line2}},<br>      
+                                            {{orderDetails.billing_address.city}},{{orderDetails.billing_address.state}},{{orderDetails.billing_address.pincode}},<br>
+                                            {{orderDetails.billing_address.country}}            
+                                        </address></td>
+                                 </tr>
+                                </tbody>
+                              </table>
+                              <h5>Product Details</h5>
+                            <table id="example2" class="table table-bordered table-hover w-100">
+                                <thead>
+                                  <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Total</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {% for product in products %}
+                                  <tr>
+                                      <td> <img height="150px" src="{{product.media}}{{product.image}}"> &nbsp;  {{product.name}}  </td>
+                                      <td> {{product.quantity}} </td>
+                                      <td> ${{product.price}} </td>
+                                      <td> ${{product.total}}  </td>
+                                  </tr>
+                                  {% endfor %}
+                                  <tr>
+                                      <td></td>
+                                      <td></td>
+                                      <td> <b>Cart Total :</b> </td>
+                                      <td> $ {{orderDetails.cart_total}} </td>
+                                  </tr>
+                                  <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td> <b>Shipping Charges :</b> </td>
+                                    <td> $ {{orderDetails.shipping}} </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td> <b>Discount :</b> </td>
+                                    <td> $ {{orderDetails.discount}} </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td> <b>Grand Total :</b> </td>
+                                    <td> {{orderDetails.total}} </td>
+                                </tr>
+                                </tbody>
+                              </table>
+                              <h5>Order History</h5>
+                              <table id="example2" class="table table-bordered table-hover w-100">
+                                  <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      {% for row in orderHistory %}
+                                      <tr>
+                                          <td> {{row.status}} </td>
+                                          <td> {{row.created_on}} </td>
+                                      </tr>
+                                      {% endfor %}
+                                  </tbody>                                  
+                              </table>
+                              <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Add Order History
+                                        <!-- <small>jQuery Validation</small> -->
+                                    </h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <form action="" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="card-body">
+                                        <div class="container">
+                                            {% if messages %}
+                                            <div class="messages">
+                                                {% for message in messages %}
+                                                <p{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</p>
+                                                    {% endfor %}
+                                            </div>
+                                            {% endif %}
+                                            {% block form %}
+                                            {{form.as_p}}
+                                            {% endblock %}
+                                        </div>
+                                        <input type="submit" class="btn btn-primary" id='submit' value="Submit">
+                                    </div>
+                                    <!-- /.card-body -->
+                                    <!-- <div class="card-footer">
+                                        <button type="button" class="btn btn-primary">Edit</button>
+                                    </div> -->
+                                </form>
+                            </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

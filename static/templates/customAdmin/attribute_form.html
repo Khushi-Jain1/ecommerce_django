@@ -1,0 +1,59 @@
+{% extends 'customAdmin/form.html' %}
+
+{% block content %}
+<form method="POST" action="">
+    {% csrf_token %}
+    <div id="form-container">
+        {{formset.management_form}}
+        {% for form in formset %}
+        <!-- {{form}} -->
+        <div class="row attribute-form attribute-block">
+            {{form}}
+            <!-- <div class="col-4">
+                <label> {{form.attribute.label}} : </label>
+                {{form.attribute}}
+            </div>
+            <div class="col-4">
+                <label> {{form.value.label}} : </label>
+                {{form.value}}
+            </div>
+           <div class="col-4">
+               <label>Delete:</label>
+               <div class="pl-4">{{form.DELETE}}</div>
+               <!-- <button class="w-50 btn btn-danger" type="button" >
+                   <i class="fas fa-trash"></i></button> --
+           </div> -->
+        </div>
+        {% endfor %}
+
+        <button id="add-form" type="button">Add Attribute</button>
+        <button type="submit">Submit</button>
+    </div>
+</form>
+{% endblock %}
+
+{% block script %}
+<script>
+    let attributeForm = document.querySelectorAll(".attribute-form")
+    let container = document.querySelector("#form-container")
+    let addButton = document.querySelector("#add-form")
+    let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+
+    let formNum = attributeForm.length - 1
+
+    addButton.addEventListener('click', addForm)
+
+    function addForm(e) {
+        e.preventDefault()
+        last = attributeForm.length - 1
+        let newForm = attributeForm[last].cloneNode(true) //Clone the bird form
+        let formRegex = RegExp(`form-(\\d){1}-`, 'g') //Regex to find all instances of the form number
+
+        formNum++ //Increment the form number
+        newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`) //Update the new form to have the correct form number
+        container.insertBefore(newForm, addButton) //Insert the new form at the end of the list of forms
+
+        totalForms.setAttribute('value', `${formNum + 1}`) //Increment the number of total forms in the form management
+    }
+</script>
+{% endblock %}

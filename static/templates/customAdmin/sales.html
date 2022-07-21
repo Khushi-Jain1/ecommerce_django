@@ -1,0 +1,84 @@
+{% extends 'customAdmin/reports.html' %}
+
+{% block report %}
+<div class="row">
+    <div class="col-9">
+      <div class="card">
+        <form action="" method="POST">
+          {% csrf_token %}
+          <div class="card-body">
+            <table id="example2" class="table table-bordered table-hover w-100">
+              <thead>
+                <tr>
+                  {% for column in table.columns %}
+                  <th>{{column}}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% csrf_token %} {% block table %} 
+                {% for column in table.data %}
+                <tr>
+                  <td> {{column.startDate}} </td>
+                  <td> {{column.endDate}} </td>
+                  {% if report == "sales" %}
+                  <td> {{column.orders}} </td>
+                  <td> {{column.products}} </td>
+                  <td> {{column.total}} </td>
+                  {% elif report == "coupon" %}
+                  <td> {{column.name}} </td>
+                  <td> {{column.code}} </td>
+                  <td> {{column.orders}} </td>
+                  {% else %}
+                  <td> {{column.customers}} </td>
+                  {% endif %}
+                </tr>
+                {% endfor %} 
+                {% endblock %}
+              </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </form>
+      </div>
+    </div>
+    <div class="col-3">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Apply Filter
+                </h3>
+            </div>
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="container">
+                        {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                            <p{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</p>
+                                {% endfor %}
+                        </div>
+                        {% endif %}
+                        <label>Start Date:</label>
+                        <div class="input-group date" id="startDate" data-target-input="nearest">
+                            <input type="text" name="startDate" value="{{date.startDate}}" class="form-control datetimepicker-input" data-target="#startDate"/>
+                            <div class="input-group-append" data-target="#startDate" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                        <label>End Date:</label>
+                        <div class="input-group date" id="endDate" data-target-input="nearest">
+                            <input type="text" name="endDate" value="{{date.endDate}}" class="form-control datetimepicker-input" data-target="#endDate"/>
+                            <div class="input-group-append" data-target="#endDate" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                        {{form.filter_form.as_p}}
+                        <input type="submit" name="sales" class="btn btn-primary" id='submit' value="Filter">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+{% endblock %}

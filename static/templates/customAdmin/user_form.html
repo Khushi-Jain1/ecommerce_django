@@ -1,0 +1,105 @@
+{% extends 'customAdmin/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}
+{{tab.parent_title}}
+{% endblock %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="{% url 'admin:dashboard' %}">Home</a></li>
+    <li class="breadcrumb-item">
+        <a href="{%url 'admin:customers' %}">{{tab.parent_title}}</a>
+    </li>
+    <!-- <li class="breadcrumb-item active">{{tab.parent_title}}</li> -->
+    <li class="breadcrumb-item active"> {{tab.title}} </li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <!-- jquery validation -->
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">{{tab.title}}
+                        <!-- <small>jQuery Validation</small> -->
+                    </h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="container">
+                            {% if messages %}
+                            <div class="messages">
+                                {% for message in messages %}
+                                <p{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</p>
+                                    {% endfor %}
+                            </div>
+                            {% endif %}
+                            <div class="row">
+                                <div class='col-sm-6'>
+                                    <label>First name : </label>
+                                    {{form.first_name}}
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>Last name : </label>
+                                    {{form.last_name}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class='col-sm-6'>
+                                    <label>Username : </label>
+                                    {{form.username}}
+                                </div>
+                                <div class='col-sm-6'>
+                                    <label>Email : </label>
+                                    {{form.email}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class='col-sm-6'>
+                                    <label>Mobile Number : </label>
+                                    {{form.mobile_number}}
+                                </div>
+                                <div class='col-sm-6'>
+                                    <label>Joining Date : </label>
+                                    {{form.date_joined}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class='col-sm-6'>
+                                    <label>Is active : </label>
+                                    {{form.is_active}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class='col-sm-6'>
+                                   <img src="{{image.media}}{{image.image}}" height="150px" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.card -->
+        </div>
+    </div>
+    <!-- /.row -->
+</div><!-- /.container-fluid -->
+{% endblock %}
+
+{% block script %}
+<script>
+    $(function () {
+      $("#datetimepicker1").datetimepicker({
+        format: 'DD/MM/YYYY HH:mm',
+      });
+    });
+  </script>
+{% endblock %}

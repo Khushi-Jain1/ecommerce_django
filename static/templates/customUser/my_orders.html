@@ -1,0 +1,137 @@
+{% extends 'customUser/baseUser.html' %}
+
+{% block content %}
+<section>
+    <div class="container">
+        <div class="row">
+            {% for order in orders %}
+            <div class="order-block">
+                <div class="header">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <span>ORDER PLACED</span><br>{{order.order_on}}
+                        </div>
+                        <div class="col-sm-3">
+                            {% if order.coupon %}
+                            <span>COUPON USED</span><br>{{order.coupon}}
+                            {% endif %}
+                        </div>
+                        {% if order.address %}
+                        <div class="col-sm-3">
+                            <span>ORDER STATUS</span><br>{{order.status}}
+                        </div>
+                        {% else %}
+                        <div class="col-sm-1">
+                            <span>SHIP TO</span><br>{{order.shipping_address.name}}
+                        </div>
+                        <div class="col-sm-1">
+                            <span>BILL TO</span><br>{{order.billing_address.name}}
+                        </div>
+                        {% endif %}
+                        <div class="col-sm-3">
+                            <span>ORDER ID</span><br>{{order.order_id}}
+                        </div>
+                    </div>
+                </div>
+                <div class="body">
+                    {% if order.address %}
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <span><b>Shipping and Billing Address : </span></b><br>
+                            {{order.address.name}}<br>
+                            {{order.address.address_line1}}<br>
+                            {{order.address.address_line2}}<br>
+                            {{order.address.city}} , 
+                            {{order.address.state}}, 
+                            {{order.address.pincode}}<br>
+                            {{order.address.country}}
+                        </div>
+                        {% else %}
+                        <div class="col-sm-3">
+                            <span><b>Shipping Address : </span></b><br>
+                            {{order.shipping_address.name}}<br>
+                            {{order.shipping_address.address_line1}}<br>
+                            {{order.shipping_address.address_line2}}<br>
+                            {{order.shipping_address.city}} , 
+                            {{order.shipping_address.state}}, 
+                            {{order.shipping_address.pincode}}<br>
+                            {{order.shipping_address.country}}
+                        </div>
+                        <div class="col-sm-3">
+                            <span><b>Billing Address : </span></b><br>
+                            {{order.billing_address.name}}<br>
+                            {{order.billing_address.address_line1}}<br>
+                            {{order.billing_address.address_line2}}<br>
+                            {{order.billing_address.city}} , 
+                            {{order.billing_address.state}}, 
+                            {{order.billing_address.pincode}}<br>
+                            {{order.billing_address.country}}
+                        </div>
+                        {% endif %}
+                        <div class="col-sm-3">
+                            <span><b>Payment Details : </span></b><br>
+                            {% if order.payment_mode == 'netbanking' %}
+                            Payment mode: Net banking<br>
+                            Payment status: {{order.payment_status}}<br>
+                            Transaction id: {{order.transaction_id}} <br>
+                            Account Holder name: {{order.account_holder}}
+                            {% else %}
+                            Payment mode: Cash on Delivery <br>
+                            Payment status: {{order.payment_status}}<br>
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-3">
+                            <span><b>Order Summary : </span></b><br>
+                            <table>
+                                <tr>
+                                    <th>Item(s) Subtotal:</th>
+                                <td>$ {{order.cart_total}} </td>
+                                </tr>
+                                <tr>
+                                    <th>Shipping:</th>
+                                <td>$ {{order.shipping}} </td>
+                                </tr>
+                                <tr>
+                                    <th>Discount:</th>
+                                <td>$ {{order.discount}} </td>
+                                </tr>
+                            </tr>
+                            <tr>
+                                <th>Grand Total:</th>
+                            <td>$ {{order.subtotal}} </td>
+                            </tr>
+                                
+                            </table>
+                        </div>
+                        </div>
+                        <hr>
+                        <table class="products">
+                            <tr>
+                                <th>Item</th>
+                                <th></th>
+                                <th>Quantity</th>
+                                <th></th>
+                                <th>Unit Price</th>
+                                <th></th>
+                                <th>Calculated Price</th>
+                            </tr>
+                            {% for product in order.products %}
+                            <tr>
+                                <td><img height="150px" src="{{order.media}}{{product.image}}" alt="{{product.name}}" ></td>
+                                <td>{{product.name}}</td>
+                                <td>{{product.quantity}} </td>
+                                <td>*</td>
+                                <td> {{product.price}} </td>
+                                <td>=</td>
+                                <td> {{product.subtotal}} </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                </div>
+                
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

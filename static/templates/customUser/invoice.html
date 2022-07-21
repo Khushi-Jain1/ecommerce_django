@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+{% load static %}
+<html>
+  <head>
+    <title>Invoice</title>
+    <style type="text/css">
+    *{
+        margin: 0;
+        padding: 0;
+        font-size: 15px;
+    }
+
+    #bill th {
+        padding: 5px 0;
+        text-align: center;
+        background-color: #0491aa;
+        color: white;
+    }
+
+    #bill {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+
+    h1{
+        text-align: center;
+    }
+
+
+    .total{
+        text-align: right;
+        /* margin: 10px; */
+        padding-top: 5px;
+    }
+
+
+    #address {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        /* border: 1px solid black; */
+    }
+
+    #address th{
+        text-align: right;
+        width: 20%;
+    }
+
+    .payment{
+        text-align: right;
+        width: 35%;
+    }
+
+    .total-data{
+        padding-left: 10px;
+        padding-top: 5px;
+    }
+
+    .data{
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+        padding-top: 5px;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <img src="static/customUser/images/home/logo.png" alt="" />
+      <p>+2 95 01 88 821</p>
+      <p>info@domain.com</p>
+    </div>
+
+    <h1>Payment Reciept</h1>
+
+    <div class="date">
+        <b>Ordered on: </b>{{date}}<br>
+        <b>Order Id: </b>{{id}}
+    </div>
+
+    <table id="bill">
+        <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+        </tr>
+        {% for product in products %}
+        <tr>
+            <td class="data">{{product.product_name}}</td>
+            <td class="data">{{product.quantity}}</td>
+            <td class="data">{{product.price}}</td>
+            <td class="data">{{product.total}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td></td>
+            <td class="total">Subtotal : </td>
+            <td class="total-data"> $ {{cart_total}} </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td class="total">Discount : </td>
+            <td class="total-data"> $ {{discount}} </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td class="total">Shipping : </td>
+            <td class="total-data"> $ {{shipping_amount}} </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td class="total">Total Amount : </td>
+            <td class="total-data"> $ {{subtotal}} </td>
+        </tr>
+    </table>
+
+    <h1>Bill To</h1>
+    <table id="address">
+        <tr>
+            <th>Billing address : </th>
+            <td>{{billing_address}}</td>
+        </tr>
+        <tr>
+            <th>Shipping address : </th>
+            <td>{{shipping_address}}</td>
+        </tr>
+    </table>
+
+
+    <h1>Payment Mode</h1>
+
+    <table id="payment">
+        {% if payment.payment_mode == 'netbanking'  %}
+        <tr>
+            <th class='payment'>Payment Mode : </th>
+            <td>{{payment.payment_mode}}</td>
+        </tr>
+        <tr>
+            <th class='payment'>Transaction Id : </th>
+            <td>{{payment.transaction_id}}</td>
+        </tr>
+        <tr>
+            <th class='payment'> Payment Account holder Email : </th>
+            <td>{{payment.email}}</td>
+        </tr>
+        <tr>
+            <th class='payment'> Payment Account holder  Name : </th>
+            <td>{{payment.name}}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th class='payment'>Payment Mode : </th>
+            <td>Cash on Delivery</td>
+        </tr>
+        {% endif %}
+        <tr>
+            <th class='payment'>Payment status : </th>
+            <td>{{payment.payment_status}}</td>
+        </tr>
+    </table>
+  </body>
+</html>

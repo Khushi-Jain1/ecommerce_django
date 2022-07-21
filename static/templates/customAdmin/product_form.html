@@ -1,0 +1,125 @@
+{% extends 'customAdmin/form.html' %} {% block form %} {{form.as_p}}
+<div class="row">
+  <!-- <div class="d-flex"> -->
+    {% for image in images %}
+    <div class="image products-panel">
+      <img
+        src="{{user.media}}{{image.image}}"
+        height="150px"
+        class="elevation-2"
+        alt="{{image.name}}"
+      />
+      <button
+        type="button"
+        onclick="location.href='./delete-image/{{image.id}}'"
+        name="image"
+        value="{{image.id}}"
+        class="btn-xs btn btn-danger right"
+      >
+        <i class="fas fa-minus-circle"></i>
+      </button>
+    </div>
+    {% endfor %}
+  <!-- </div> -->
+</div>
+
+<div id="form-container" class="attribute-block p-4 m-3">
+  <div id='attributes'>
+  {{attribute_form.management_form}} {% for form in attribute_form %}
+  <div class="row attribute-form">
+    {{form}}
+    <button
+      onclick="handleClick('{{form.instance}}')"
+      type="button"
+      class="btn btn-primary"
+      style="margin-top: 0px; margin-bottom: 20px;"
+    >
+      <i class="fas fa-trash"></i>
+    </button>
+  </div>
+  {% endfor %}
+</div>
+  <button id="add-form" class="btn btn-primary" type="button">
+    Add Attribute
+  </button>
+  <!-- <button type="submit">Submit</button> -->
+</div>
+{% endblock %} {% block script %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script>
+  let attributeForm = document.querySelectorAll(".attribute-form");
+  let container = document.querySelector("#form-container");
+  let addButton = document.querySelector("#add-form");
+  let totalForms = document.querySelector("#id_form-TOTAL_FORMS");
+
+  let formNum = attributeForm.length - 1;
+
+  // $("#id_form-" + formNum + "-value option").remove();
+
+  addButton.addEventListener("click", addForm);
+
+  function addForm(e) {
+    e.preventDefault();
+    last = attributeForm.length - 1;
+    let newForm = attributeForm[last].cloneNode(true);
+    let formRegex = RegExp(`form-(\\d){1}-`, "g");
+
+    formNum++;
+    newForm.innerHTML = newForm.innerHTML.replace(
+      formRegex,
+      `form-${formNum}-`
+    );
+    container.insertBefore(newForm, addButton);
+
+    totalForms.setAttribute("value", `${formNum + 1}`);
+  }
+
+  $("#form-container").on("change", "select", function () {
+    elemID = $(this).attr("id");
+
+    // value = $(this).find(':selected').val();
+    // console.log(value)
+
+    var id = elemID.replace(/[^\d.]/g, "");
+    if (elemID == "id_form-" + id + "-attribute") {
+      // value = $('#' + elemID).find(':selected').val();
+      value = $(this).find(":selected").val();
+      // $('select#id_form-1-value').html('')
+      $.ajax({
+        type: "GET",
+        url: "/admin/attribute-value/",
+        data: {
+          post_id: value ? value : 0,
+        },
+        success: function (data) {
+          options = JSON.parse(data);
+          $("#id_form-" + id + "-value option").remove();
+          for (i = 0; i < options.length; i++) {
+            $("#id_form-" + id + "-value").append(
+              $("<option></option>")
+                .attr("value", options[i].key)
+                .text(options[i].value)
+            );
+          }
+        },
+      });
+    }
+  });
+
+  function handleClick(value) {
+    if (value != "None") {
+      $.ajax({
+        type: "GET",
+        url: "/admin/delete-attribute/",
+        data: {
+          value: value ? value : 0,
+        },
+        success: function (data) {
+          console.log(data);
+          $("#attributes").html(data.data);
+        },
+      });
+    }
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'customUser/baseUser.html' %} {% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="order-block col-sm-offset-3 track-order">
+      <div class="header">
+        <div class="row">
+          <center><h1>Track Order</h1></center>
+        </div>
+      </div>
+      <div class="body">
+        <form method="POST" action="">
+          {% csrf_token %}
+          <center>{{form.as_p}}
+            {% if messages %}
+              <div class="messages">
+                {% for message in messages %}
+                <p{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</p>
+                  {% endfor %}
+                  {% endif %}
+          </center>
+          <center>
+            <button type="submit" class="btn btn-primary">Track Order</button>
+          </center>
+        </form>
+        {% if orderHistory %}
+        <center>
+          <table id="status-table">
+            <tr> 
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+            {% for row in orderHistory %}
+            <tr>
+              <td>{{row.status}}</td>
+              <td>{{row.date}}</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </center>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

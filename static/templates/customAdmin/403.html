@@ -1,0 +1,9 @@
+{% extends "customAdmin/base.html" %}
+
+{%block form%}
+<center>
+    <h1>You're not authorized to view this page</h1>
+    <a href="{% url 'user:home' %}" >Go Back >></a>
+</center>
+
+{% endblock %}
